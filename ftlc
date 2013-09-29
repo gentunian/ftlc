@@ -1,0 +1,52 @@
+#!/bin/bash
+
+# FTLC bash script by Sebastian Treu, 2013
+# No cheat! Helpful for people sharing their computers and user.
+# Use it at your own ris.k
+
+# FTL data directory, commonly locate at "FTL Faster Than Light\data"
+# Steam:
+FTL_DATA_DIR=${HOME}/.local/share/Steam/SteamApps/common/FTL\ Faster\ Than\ Light/data
+
+# Path to the continue.sav file
+CONTINUE_PATH=${HOME}/.local/share/FasterThanLight/continue.sav
+
+# FTL directory. This is where sessions are saved
+FTLC_DIR=${HOME}/.local/share/ftlc
+
+# Gets all sessions names
+read -ra SESSIONS <<< $(find ${FTLC_DIR} -name 'continue-*.sav' | sed -e 's/^.*-\(.*\).sav$/\1/g')
+
+# If some sessions were found, provide an option to restore it
+if [ ${#SESSIONS[@]} -gt 0 ]; then
+    echo "Which session do you whish to restore?"
+    SESSIONS_COUNT=${#SESSIONS[@]}
+    for i in $(seq 0 $((SESSIONS_COUNT-1))); do
+        echo -e "\t$i. ${SESSIONS[$i]}"
+    done
+    echo -e "\t$((SESSIONS_COUNT)). I don't remember, just use the last saved game if any."
+    SESSION_INDEX=""
+    # if $SESSION_INDEX is not a number or if it's greater than $SESSIONS_COUNT 
+    # retrieve a new value from the user.
+    while [[ ! ${SESSION_INDEX} =~ ^[0-9]+$ ]] || [[ ${SESSION_INDEX} -gt ${SESSIONS_COUNT} ]]; do
+        read -p "Session: " SESSION_INDEX
+    done
+    # Do not copy if the user does not remember anything
+    if [ ${SESSION_INDEX} -ne ${SESSIONS_COUNT} ]; then
+        cp "${FTLC_DIR}/continue-${SESSIONS[${SESSION_INDEX}]}.sav" ${CONTINUE_PATH}
+    fi
+fi
+
+cd "${FTL_DATA_DIR}"
+./FTL "$@"
+
+if [[ -e ${CONTINUE_PATH} ]]; then
+    read -p "Do you want to save the session to be restored later? [n/<session name for yes>] " NAME
+    case $NAME in
+        [nN]* ) echo "Warning: ${CONTINUE_PATH} file may be overwritten next time you call this script and restore a session."
+            exit;;
+    esac
+    cp ${CONTINUE_PATH} "${FTLC_DIR}/continue-${NAME}.sav" && echo "Session saved at ${FTLC_DIR}/continue-${NAME}.sav"
+fi
+
+echo "done..."
