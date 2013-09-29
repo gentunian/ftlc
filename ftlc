@@ -4,7 +4,7 @@
 # No cheat! Helpful for people sharing their computers and user.
 # Use it at your own ris.k
 
-# FTL data directory, commonly locate at "FTL Faster Than Light\data"
+# FTL data directory, commonly located at "FTL Faster Than Light\data"
 # Steam:
 FTL_DATA_DIR=${HOME}/.local/share/Steam/SteamApps/common/FTL\ Faster\ Than\ Light/data
 
