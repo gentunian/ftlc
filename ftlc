@@ -33,7 +33,7 @@ if [ ${#SESSIONS[@]} -gt 0 ]; then
     done
     # Do not copy if the user does not remember anything
     if [ ${SESSION_INDEX} -ne ${SESSIONS_COUNT} ]; then
-        cp "${FTLC_DIR}/${SESSIONS[${SESSION_INDEX}]}.sav" ${CONTINUE_PATH}
+        cp "${SESSIONS[${SESSION_INDEX}]}" ${CONTINUE_PATH}
     fi
 fi
 
