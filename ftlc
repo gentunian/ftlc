@@ -46,6 +46,7 @@ if [[ -e ${CONTINUE_PATH} ]]; then
         [nN]* ) echo "Warning: ${CONTINUE_PATH} file may be overwritten next time you call this script and restore a session."
             exit;;
     esac
+    test -d ${FTLC_DIR} || mkdir -p ${FTLC_DIR}
     cp ${CONTINUE_PATH} "${FTLC_DIR}/continue-${NAME}.sav" && echo "Session saved at ${FTLC_DIR}/continue-${NAME}.sav"
 fi
 
