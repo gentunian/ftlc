@@ -15,7 +15,7 @@ CONTINUE_PATH=${HOME}/.local/share/FasterThanLight/continue.sav
 FTLC_DIR=${HOME}/.local/share/ftlc
 
 # Gets all sessions names
-read -ra SESSIONS <<< $(find ${FTLC_DIR} -name 'continue-*.sav')
+read -ra SESSIONS <<< $(find ${FTLC_DIR} -name '*.sav')
 
 # If some sessions were found, provide an option to restore it
 if [ ${#SESSIONS[@]} -gt 0 ]; then
@@ -49,7 +49,7 @@ if [[ -e ${CONTINUE_PATH} ]]; then
             exit;;
     esac
     test -d ${FTLC_DIR} || mkdir -p ${FTLC_DIR}
-    cp ${CONTINUE_PATH} "${FTLC_DIR}/${NAME}.sav" && echo "Session saved at ${FTLC_DIR}/continue-${NAME}.sav"
+    cp ${CONTINUE_PATH} "${FTLC_DIR}/${NAME}.sav" && echo "Session saved at ${FTLC_DIR}/${NAME}.sav"
 fi
 
 echo "done..."
