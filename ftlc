@@ -15,7 +15,7 @@ CONTINUE_PATH=${HOME}/.local/share/FasterThanLight/continue.sav
 FTLC_DIR=${HOME}/.local/share/ftlc
 
 # Gets all sessions names
-read -ra SESSIONS <<< $(find ${FTLC_DIR} -name 'continue-*.sav' | sed -e 's/^.*-\(.*\).sav$/\1/g')
+read -ra SESSIONS <<< $(find ${FTLC_DIR} -name 'continue-*.sav')
 
 # If some sessions were found, provide an option to restore it
 if [ ${#SESSIONS[@]} -gt 0 ]; then
@@ -33,7 +33,7 @@ if [ ${#SESSIONS[@]} -gt 0 ]; then
     done
     # Do not copy if the user does not remember anything
     if [ ${SESSION_INDEX} -ne ${SESSIONS_COUNT} ]; then
-        cp "${FTLC_DIR}/continue-${SESSIONS[${SESSION_INDEX}]}.sav" ${CONTINUE_PATH}
+        cp "${FTLC_DIR}/${SESSIONS[${SESSION_INDEX}]}.sav" ${CONTINUE_PATH}
     fi
 fi
 
@@ -45,9 +45,11 @@ if [[ -e ${CONTINUE_PATH} ]]; then
     case $NAME in
         [nN]* ) echo "Warning: ${CONTINUE_PATH} file may be overwritten next time you call this script and restore a session."
             exit;;
+        '')
+            exit;;
     esac
     test -d ${FTLC_DIR} || mkdir -p ${FTLC_DIR}
-    cp ${CONTINUE_PATH} "${FTLC_DIR}/continue-${NAME}.sav" && echo "Session saved at ${FTLC_DIR}/continue-${NAME}.sav"
+    cp ${CONTINUE_PATH} "${FTLC_DIR}/${NAME}.sav" && echo "Session saved at ${FTLC_DIR}/continue-${NAME}.sav"
 fi
 
 echo "done..."
